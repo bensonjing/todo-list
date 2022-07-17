@@ -66,7 +66,7 @@ const loadSidebar = (project) => {
   const addBtn = document.createElement("button");
   addBtn.textContent = "Add";
   addBtn.addEventListener("click", () => {
-    const newProject = Project(projectInput.value, []);
+    const newProject = Project(projectInput.value);
     TodoList.addProject(newProject);
     loadPage(project);
   });
@@ -106,8 +106,18 @@ const loadProject = (project) => {
   project.getTasks().forEach((task) => {
     const taskItem = document.createElement("div");
 
+    const taskCheckbox = document.createElement("input");
+    taskCheckbox.addEventListener("change", () => {
+      if (taskCheckbox.checked) {
+        project.removeTask(task);
+        page.removeChild(taskItem);
+      }
+    });
+
+    taskCheckbox.setAttribute("type", "checkbox");
     const taskTitle = document.createElement("div");
     taskTitle.textContent = task.getName();
+    taskItem.appendChild(taskCheckbox);
     taskItem.appendChild(taskTitle);
 
     const taskDueDate = document.createElement("div");

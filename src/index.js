@@ -1,4 +1,6 @@
 import "./style.css";
+import Task from "./modules/Task";
+import Project from "./modules/Project";
 import TodoList from "./modules/TodoList";
 
 const content = document.querySelector("#content");
@@ -12,7 +14,7 @@ const loadHeader = () => {
   content.appendChild(header);
 };
 
-const loadSidebar = () => {
+const loadSidebar = (project) => {
   const sidebar = document.createElement("div");
   sidebar.setAttribute("id", "sidebar");
 
@@ -49,6 +51,9 @@ const loadSidebar = () => {
     .forEach((project) => {
       const projectBtn = document.createElement("button");
       projectBtn.textContent = project.getName();
+      projectBtn.addEventListener("click", () => {
+        loadPage(project);
+      });
       section.appendChild(projectBtn);
     });
 
@@ -60,6 +65,11 @@ const loadSidebar = () => {
 
   const addBtn = document.createElement("button");
   addBtn.textContent = "Add";
+  addBtn.addEventListener("click", () => {
+    const newProject = Project(projectInput.value, []);
+    TodoList.addProject(newProject);
+    loadPage(project);
+  });
   const cancelBtn = document.createElement("button");
   cancelBtn.textContent = "Cancel";
 
@@ -115,8 +125,16 @@ const loadProject = (project) => {
 
   const addBtn = document.createElement("button");
   addBtn.textContent = "Add";
+  addBtn.addEventListener("click", () => {
+    const newTask = Task(taskInput.value, "DueDate");
+    project.addTask(newTask);
+    loadPage(project);
+  });
   const cancelBtn = document.createElement("button");
   cancelBtn.textContent = "Cancel";
+  cancelBtn.addEventListener("click", () => {
+    addTaskInput.classList.toggle("active");
+  });
 
   const buttons = document.createElement("div");
   buttons.appendChild(addBtn);
@@ -141,7 +159,7 @@ const loadPage = (project) => {
   content.innerHTML = "";
   mainPage.innerHTML = "";
   loadHeader();
-  loadSidebar();
+  loadSidebar(project);
   loadProject(project);
   content.appendChild(mainPage);
 };

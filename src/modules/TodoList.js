@@ -15,5 +15,9 @@ export default (function TodoList() {
     return projects.find((project) => project.getName() == name);
   };
 
-  return { getProjects, getProjectOne };
+  const addProject = (project) => {
+    projects.push(project);
+  };
+
+  return { getProjects, getProjectOne, addProject };
 })();
